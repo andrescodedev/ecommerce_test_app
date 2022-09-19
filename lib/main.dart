@@ -1,3 +1,4 @@
+import 'package:ecommerce_test_app/screens/screens.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,17 +14,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ecommerce Test App',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Ecommerce App'),
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Colors.grey[300],
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.indigo,
+          elevation: 0.0,
         ),
-        body: const Center(
-          child: Text('WELCOME'),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.indigo,
+          elevation: 0.0,
         ),
       ),
+      initialRoute: '/home',
+      routes: {
+        '/home': (context) => const HomeScreen(),
+      },
     );
   }
 }
