@@ -1,8 +1,8 @@
 import 'package:ecommerce_test_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class ProductListScreen extends StatelessWidget {
+  const ProductListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,12 @@ class HomeScreen extends StatelessWidget {
           horizontal: 20.0,
           vertical: 20.0,
         ),
-        itemBuilder: (context, index) => const ProductCardWidget(),
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/details'),
+            child: const ProductCardWidget(),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),

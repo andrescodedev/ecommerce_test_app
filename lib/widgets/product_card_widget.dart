@@ -51,7 +51,7 @@ class _AvailableTagWidget extends StatelessWidget {
           horizontal: 5.0,
         ),
         decoration: const BoxDecoration(
-          color: Colors.indigo,
+          color: Colors.red,
           borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(30.0),
             topLeft: Radius.circular(30.0),

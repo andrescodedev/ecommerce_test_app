@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.indigo,
           elevation: 0.0,
+          centerTitle: true,
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Colors.indigo,
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/home',
       routes: {
-        '/home': (context) => const HomeScreen(),
+        '/home': (context) => const ProductListScreen(),
+        '/details': (context) => const ProductEditScreen(),
       },
     );
   }
