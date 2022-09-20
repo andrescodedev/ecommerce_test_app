@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Ecommerce Test App',
       theme: ThemeData.light().copyWith(
+        //Colors.grey[300]
         scaffoldBackgroundColor: Colors.grey[300],
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.indigo,

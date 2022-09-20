@@ -8,6 +8,7 @@ class ProductEditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(
           horizontal: 10.0,
           vertical: 10.0,
@@ -15,8 +16,13 @@ class ProductEditScreen extends StatelessWidget {
         child: Column(
           children: const [
             ProductImageWidget(),
+            ProductEditFormWidget(),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.save),
       ),
     );
   }

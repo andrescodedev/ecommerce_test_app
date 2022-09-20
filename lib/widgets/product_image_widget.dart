@@ -29,7 +29,7 @@ class _CameraButtonWidget extends StatelessWidget {
           onPressed: () {},
           icon: const Icon(
             Icons.camera_alt,
-            color: Colors.white,
+            color: Colors.indigo,
             size: 30.0,
           ),
         ),
@@ -50,7 +50,7 @@ class _BackButtonWidget extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
         icon: const Icon(
           Icons.arrow_back_ios,
-          color: Colors.white,
+          color: Colors.indigo,
         ),
       ),
     );
@@ -67,9 +67,6 @@ class _ProductPhotoWidget extends StatelessWidget {
     return Container(
       width: 400.0,
       height: 350.0,
-      margin: const EdgeInsets.only(
-        bottom: 40.0,
-      ),
       decoration: const BoxDecoration(
         color: Colors.indigo,
         borderRadius: BorderRadius.only(
@@ -84,11 +81,17 @@ class _ProductPhotoWidget extends StatelessWidget {
           ),
         ],*/
       ),
-      /*child: const FadeInImage(
-        placeholder: AssetImage('assets/images/loading.gif'),
-        image: AssetImage('assets/images/no-image.jpg'),
-        fit: BoxFit.cover,
-      ),*/
+      child: const ClipRRect(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+        child: FadeInImage(
+          placeholder: AssetImage('assets/images/loading.gif'),
+          image: AssetImage('assets/images/no-image.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 }
