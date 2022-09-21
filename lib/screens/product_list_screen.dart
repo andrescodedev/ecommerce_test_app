@@ -1,11 +1,15 @@
-import 'package:ecommerce_test_app/widgets/widgets.dart';
+import 'package:ecommerce_test_app/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:ecommerce_test_app/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class ProductListScreen extends StatelessWidget {
   const ProductListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final productService = Provider.of<ProductService>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Productos'),

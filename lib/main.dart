@@ -1,8 +1,17 @@
 import 'package:ecommerce_test_app/screens/screens.dart';
+import 'package:ecommerce_test_app/services/services.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => ProductService(),
+      ),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
