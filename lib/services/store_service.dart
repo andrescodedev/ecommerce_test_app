@@ -31,7 +31,7 @@ class StoreService with ChangeNotifier {
     print(products);
   }*/
 
-  Future<List<StoreModel>> loadStores() async {
+  void loadStores() async {
     print('Load stores');
     isLoading = true;
     notifyListeners();
@@ -50,7 +50,5 @@ class StoreService with ChangeNotifier {
 
     isLoading = false;
     notifyListeners();
-
-    return stores;
   }
 }

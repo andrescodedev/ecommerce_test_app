@@ -8,9 +8,7 @@ class ProductService with ChangeNotifier {
       'ecommerce-test-app-a9cf5-default-rtdb.firebaseio.com';
   final List<ProductModel> products = [];
 
-  ProductService() {
-    loadProductsByStore('T02');
-  }
+  bool isLoading = true;
 
   /*void loadProducts() async {
     print('Iniamos el loadProducts');
@@ -29,8 +27,11 @@ class ProductService with ChangeNotifier {
     print(products);
   }*/
 
-  Future<List<ProductModel>> loadProductsByStore(String keyStore) async {
+  void loadProductsByStore({required String keyStore}) async {
     print('Load products by store');
+    /*isLoading = true;
+    notifyListeners();*/
+
     Uri url = Uri.https(_baseUrl, '/productos/$keyStore.json');
     http.Response response = await http.get(url);
 
@@ -43,6 +44,7 @@ class ProductService with ChangeNotifier {
       products.add(productTemp);
     });
 
-    return products;
+    isLoading = false;
+    notifyListeners();
   }
 }

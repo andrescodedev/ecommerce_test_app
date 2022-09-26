@@ -27,7 +27,11 @@ class StoresListScreen extends StatelessWidget {
                 final store = storeService.stores[index];
 
                 return GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/products'),
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/products',
+                    arguments: store,
+                  ),
                   child: StoreCardWidget(
                     store: store,
                   ),
