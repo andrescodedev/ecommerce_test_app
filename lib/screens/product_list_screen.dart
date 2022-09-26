@@ -13,7 +13,6 @@ class ProductListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Productos'),
-        centerTitle: true,
       ),
       body: ListView.builder(
         physics: const BouncingScrollPhysics(),

@@ -9,6 +9,9 @@ void main() {
       ChangeNotifierProvider(
         create: (context) => ProductService(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => StoreService(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -36,10 +39,11 @@ class MyApp extends StatelessWidget {
           elevation: 0.0,
         ),
       ),
-      initialRoute: '/home',
+      initialRoute: '/stores',
       routes: {
-        '/home': (context) => const ProductListScreen(),
+        '/products': (context) => const ProductListScreen(),
         '/details': (context) => const ProductEditScreen(),
+        '/stores': (context) => const StoresListScreen(),
       },
     );
   }

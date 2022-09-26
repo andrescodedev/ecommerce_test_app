@@ -3,13 +3,15 @@ import 'package:ecommerce_test_app/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class ProductService with ChangeNotifier {
+class StoreService with ChangeNotifier {
   final String _baseUrl =
       'ecommerce-test-app-a9cf5-default-rtdb.firebaseio.com';
-  final List<ProductModel> products = [];
+  final List<StoreModel> stores = [];
 
-  ProductService() {
-    loadProductsByStore('T02');
+  bool isLoading = true;
+
+  StoreService() {
+    loadStores();
   }
 
   /*void loadProducts() async {
@@ -29,20 +31,26 @@ class ProductService with ChangeNotifier {
     print(products);
   }*/
 
-  Future<List<ProductModel>> loadProductsByStore(String keyStore) async {
-    print('Load products by store');
-    Uri url = Uri.https(_baseUrl, '/productos/$keyStore.json');
+  Future<List<StoreModel>> loadStores() async {
+    print('Load stores');
+    isLoading = true;
+    notifyListeners();
+
+    Uri url = Uri.https(_baseUrl, '/tiendas.json');
     http.Response response = await http.get(url);
 
     final Map<String, dynamic> productsMap = await json.decode(response.body);
 
     productsMap.forEach((key, value) {
-      final productTemp = ProductModel.fromMap(value);
+      final storeTemp = StoreModel.fromMap(value);
       //productTemp.id = key;
-      print(productTemp.toMap());
-      products.add(productTemp);
+      print(storeTemp.toMap());
+      stores.add(storeTemp);
     });
 
-    return products;
+    isLoading = false;
+    notifyListeners();
+
+    return stores;
   }
 }
