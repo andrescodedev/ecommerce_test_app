@@ -9,9 +9,9 @@ class ProductListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Hola mundo');
     final productService = Provider.of<ProductService>(context);
-    StoreModel store = ModalRoute.of(context)!.settings.arguments as StoreModel;
-    productService.loadProductsByStore(keyStore: store.id);
+    print('Hola munde');
 
     return Scaffold(
       appBar: AppBar(

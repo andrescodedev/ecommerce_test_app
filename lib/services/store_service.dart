@@ -32,7 +32,6 @@ class StoreService with ChangeNotifier {
   }*/
 
   void loadStores() async {
-    print('Load stores');
     isLoading = true;
     notifyListeners();
 

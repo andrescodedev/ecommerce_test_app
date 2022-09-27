@@ -9,6 +9,7 @@ class StoresListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storeService = Provider.of<StoreService>(context);
+    final productService = Provider.of<ProductService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -27,11 +28,14 @@ class StoresListScreen extends StatelessWidget {
                 final store = storeService.stores[index];
 
                 return GestureDetector(
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    '/products',
-                    arguments: store,
-                  ),
+                  onTap: () {
+                    productService.products.clear();
+                    productService.loadProductsByStore(store: store);
+                    Navigator.pushNamed(
+                      context,
+                      '/products',
+                    );
+                  },
                   child: StoreCardWidget(
                     store: store,
                   ),

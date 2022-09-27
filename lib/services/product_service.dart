@@ -10,29 +10,14 @@ class ProductService with ChangeNotifier {
 
   bool isLoading = true;
 
-  /*void loadProducts() async {
-    print('Iniamos el loadProducts');
-    Uri url = Uri.https(_baseUrl, '/productos.json');
-    http.Response response = await http.get(url);
-
-    final Map<String, dynamic> productsMap = await json.decode(response.body);
-
-    productsMap.forEach((key, value) {
-      final productTemp = ProductModel.fromMap(value);
-      //productTemp.id = key;
-
-      products.add(productTemp);
-    });
-
-    print(products);
-  }*/
-
-  void loadProductsByStore({required String keyStore}) async {
+  void loadProductsByStore({
+    required StoreModel store,
+  }) async {
     print('Load products by store');
     /*isLoading = true;
     notifyListeners();*/
 
-    Uri url = Uri.https(_baseUrl, '/productos/$keyStore.json');
+    Uri url = Uri.https(_baseUrl, '/productos/${store.id}.json');
     http.Response response = await http.get(url);
 
     final Map<String, dynamic> productsMap = await json.decode(response.body);
