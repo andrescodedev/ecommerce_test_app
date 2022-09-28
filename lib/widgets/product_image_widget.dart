@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 
 class ProductImageWidget extends StatelessWidget {
-  const ProductImageWidget({Key? key}) : super(key: key);
+  const ProductImageWidget({
+    Key? key,
+    this.productPhoto,
+  }) : super(key: key);
+
+  final String? productPhoto;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: const [
-        _ProductPhotoWidget(),
-        _BackButtonWidget(),
-        _CameraButtonWidget(),
+      children: [
+        _ProductPhotoWidget(
+          productPhoto: productPhoto,
+        ),
+        const _BackButtonWidget(),
+        const _CameraButtonWidget(),
       ],
     );
   }
@@ -60,7 +67,10 @@ class _BackButtonWidget extends StatelessWidget {
 class _ProductPhotoWidget extends StatelessWidget {
   const _ProductPhotoWidget({
     Key? key,
+    this.productPhoto,
   }) : super(key: key);
+
+  final String? productPhoto;
 
   @override
   Widget build(BuildContext context) {
@@ -81,17 +91,29 @@ class _ProductPhotoWidget extends StatelessWidget {
           ),
         ],*/
       ),
-      child: const ClipRRect(
-        borderRadius: BorderRadius.only(
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30.0),
           topRight: Radius.circular(30.0),
         ),
-        child: FadeInImage(
-          placeholder: AssetImage('assets/images/loading.gif'),
-          image: AssetImage('assets/images/no-image.jpg'),
-          fit: BoxFit.cover,
-        ),
+        child: (productPhoto == null) ? _localImage() : _networkImage(),
       ),
+    );
+  }
+
+  Widget _networkImage() {
+    return FadeInImage(
+      placeholder: const AssetImage('assets/images/loading.gif'),
+      image: NetworkImage(productPhoto as String),
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _localImage() {
+    return const FadeInImage(
+      placeholder: AssetImage('assets/images/loading.gif'),
+      image: AssetImage('assets/images/no-image.jpg'),
+      fit: BoxFit.cover,
     );
   }
 }

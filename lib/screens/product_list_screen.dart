@@ -30,7 +30,13 @@ class ProductListScreen extends StatelessWidget {
                 ProductModel product = productService.products[index];
 
                 return GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/details'),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/edit',
+                      arguments: product,
+                    );
+                  },
                   child: ProductCardWidget(
                     product: product,
                   ),

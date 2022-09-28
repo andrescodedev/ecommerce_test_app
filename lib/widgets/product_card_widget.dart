@@ -188,12 +188,24 @@ class _BackgroundImage extends StatelessWidget {
       child: SizedBox(
         width: 400.0,
         height: 300.0,
-        child: FadeInImage(
-          placeholder: const AssetImage('assets/images/loading.gif'),
-          image: NetworkImage(product.foto as String),
-          fit: BoxFit.cover,
-        ),
+        child: (product.foto == null) ? _localImage() : _networkImage(),
       ),
+    );
+  }
+
+  Widget _networkImage() {
+    return FadeInImage(
+      placeholder: const AssetImage('assets/images/loading.gif'),
+      image: NetworkImage(product.foto as String),
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _localImage() {
+    return const FadeInImage(
+      placeholder: AssetImage('assets/images/loading.gif'),
+      image: AssetImage('assets/images/no-image.jpg'),
+      fit: BoxFit.cover,
     );
   }
 }

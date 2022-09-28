@@ -30,7 +30,9 @@ class StoreCardWidget extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          const _BackgroundImage(),
+          _BackgroundImage(
+            storePhoto: store.foto,
+          ),
           _DetailsTagWidget(
             store: store,
           ),
@@ -131,21 +133,38 @@ class _DetailsTagWidget extends StatelessWidget {
 class _BackgroundImage extends StatelessWidget {
   const _BackgroundImage({
     Key? key,
+    this.storePhoto,
   }) : super(key: key);
+
+  final String? storePhoto;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
-      child: const SizedBox(
+      child: SizedBox(
         width: 400.0,
         height: 300.0,
-        child: FadeInImage(
-          placeholder: AssetImage('assets/images/loading.gif'),
-          image: AssetImage('assets/images/no-image.jpg'),
-          fit: BoxFit.cover,
-        ),
+        child: (storePhoto == null || storePhoto == '')
+            ? _localImage()
+            : _networkImage(),
       ),
+    );
+  }
+
+  Widget _networkImage() {
+    return FadeInImage(
+      placeholder: const AssetImage('assets/images/loading.gif'),
+      image: NetworkImage(storePhoto as String),
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _localImage() {
+    return const FadeInImage(
+      placeholder: AssetImage('assets/images/loading.gif'),
+      image: AssetImage('assets/images/no-image.jpg'),
+      fit: BoxFit.cover,
     );
   }
 }
