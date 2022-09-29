@@ -1,19 +1,22 @@
+import 'package:ecommerce_test_app/models/models.dart';
+import 'package:ecommerce_test_app/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductImageWidget extends StatelessWidget {
   const ProductImageWidget({
     Key? key,
-    this.productPhoto,
   }) : super(key: key);
-
-  final String? productPhoto;
 
   @override
   Widget build(BuildContext context) {
+    final productService = Provider.of<ProductService>(context);
+    ProductModel product = productService.selectedProduct;
+
     return Stack(
       children: [
         _ProductPhotoWidget(
-          productPhoto: productPhoto,
+          productPhoto: product.foto,
         ),
         const _BackButtonWidget(),
         const _CameraButtonWidget(),

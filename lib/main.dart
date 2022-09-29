@@ -1,3 +1,4 @@
+import 'package:ecommerce_test_app/providers/product_editform_provider.dart';
 import 'package:ecommerce_test_app/screens/screens.dart';
 import 'package:ecommerce_test_app/services/services.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (context) => StoreService(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => ProductEditFormProvider(),
       ),
     ],
     child: const MyApp(),

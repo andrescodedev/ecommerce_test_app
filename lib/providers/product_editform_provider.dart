@@ -4,9 +4,15 @@ import 'package:flutter/material.dart';
 class ProductEditFormProvider with ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  //ProductModel productSelected;
-
+  ///
+  /// FUNCTIONS
+  ///
   bool isValidForm() {
     return formKey.currentState?.validate() ?? false;
+  }
+
+  void availabilityUpdated(bool value, ProductModel product) {
+    product.disponible = value;
+    notifyListeners();
   }
 }

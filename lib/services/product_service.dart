@@ -4,12 +4,36 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ProductService with ChangeNotifier {
+  ///
+  /// VARIABLES
+  ///
   final String _baseUrl =
       'ecommerce-test-app-a9cf5-default-rtdb.firebaseio.com';
+
   final List<ProductModel> products = [];
 
   bool isLoading = true;
 
+  ProductModel _selectedProduct = ProductModel(
+    disponible: false,
+    id: '',
+    nombre: '',
+    precio: 0,
+  );
+
+  ///
+  /// SETTERS AND GETTERS
+  ///
+  ProductModel get selectedProduct => _selectedProduct;
+
+  set selectedProduct(ProductModel product) {
+    _selectedProduct = product;
+    notifyListeners();
+  }
+
+  ///
+  /// FUNCTIONS
+  ///
   void loadProductsByStore({
     required StoreModel store,
   }) async {
