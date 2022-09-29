@@ -53,20 +53,27 @@ class ProductEditFormWidget extends StatelessWidget {
               },
             ),
             TextFormField(
-              initialValue: '\$${product.precio}',
-              onChanged: (value) => product.precio = int.parse(value),
-              inputFormatters: [
+              initialValue: '${product.precio}',
+              onChanged: (value) {
+                if (int.tryParse(value) == null) {
+                  formProvider.priceFieldState = false;
+                } else {
+                  product.precio = int.parse(value);
+                  formProvider.priceFieldState = true;
+                }
+              },
+              /*inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}')),
-              ],
+              ],*/
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 hintText: '\$0.0',
                 labelText: 'Precio:',
               ),
               validator: (value) {
-                if (int.tryParse(value as String) == null) {
-                  return 'Ingrese solo valores númericos';
-                }
+                return (formProvider.priceFieldState)
+                    ? null
+                    : 'Ingrese solo valores númericos';
               },
             ),
             SwitchListTile.adaptive(

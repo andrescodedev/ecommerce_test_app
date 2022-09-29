@@ -81,7 +81,7 @@ class _ProductPhotoWidget extends StatelessWidget {
       width: 400.0,
       height: 350.0,
       decoration: const BoxDecoration(
-        color: Colors.indigo,
+        color: Colors.black,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0),
           topRight: Radius.circular(30.0),
@@ -94,12 +94,15 @@ class _ProductPhotoWidget extends StatelessWidget {
           ),
         ],*/
       ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30.0),
-          topRight: Radius.circular(30.0),
+      child: Opacity(
+        opacity: 0.5,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
+          child: (productPhoto == null) ? _localImage() : _networkImage(),
         ),
-        child: (productPhoto == null) ? _localImage() : _networkImage(),
       ),
     );
   }
