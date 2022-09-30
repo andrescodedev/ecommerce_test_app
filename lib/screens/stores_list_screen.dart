@@ -1,4 +1,4 @@
-import 'package:ecommerce_test_app/services/services.dart';
+import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_test_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -8,14 +8,14 @@ class StoresListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final storeService = Provider.of<StoreService>(context);
-    final productService = Provider.of<ProductService>(context);
+    final storeProvider = Provider.of<StoreProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tiendas'),
       ),
-      body: (storeService.isLoading)
+      body: (storeProvider.isLoadingStores)
           ? const CustomLoadingWidget()
           : ListView.builder(
               physics: const BouncingScrollPhysics(),
@@ -23,14 +23,17 @@ class StoresListScreen extends StatelessWidget {
                 horizontal: 20.0,
                 vertical: 20.0,
               ),
-              itemCount: storeService.stores.length,
+              itemCount: storeProvider.stores.length,
               itemBuilder: (context, index) {
-                final store = storeService.stores[index];
+                final store = storeProvider.stores[index];
 
                 return GestureDetector(
                   onTap: () {
-                    productService.products.clear();
-                    productService.loadProductsByStore(store: store);
+                    storeProvider.selectedStore = store;
+                    productProvider.products.clear();
+                    productProvider.getProductsByStoreFromService(
+                      storeId: store.id,
+                    );
                     Navigator.pushNamed(
                       context,
                       '/products',

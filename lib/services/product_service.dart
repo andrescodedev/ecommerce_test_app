@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:ecommerce_test_app/models/models.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class ProductService with ChangeNotifier {
+class ProductService {
   ///
   /// VARIABLES
   ///
@@ -12,36 +11,15 @@ class ProductService with ChangeNotifier {
 
   final List<ProductModel> products = [];
 
-  bool isLoading = true;
-
-  ProductModel _selectedProduct = ProductModel(
-    disponible: false,
-    id: '',
-    nombre: '',
-    precio: 0,
-  );
-
   ///
-  /// SETTERS AND GETTERS
+  /// API REST FUNCTIONS
   ///
-  ProductModel get selectedProduct => _selectedProduct;
-
-  set selectedProduct(ProductModel product) {
-    _selectedProduct = product;
-    notifyListeners();
-  }
-
-  ///
-  /// FUNCTIONS
-  ///
-  void loadProductsByStore({
-    required StoreModel store,
+  Future<List<ProductModel>> loadProductsByStore({
+    required String storeId,
   }) async {
     print('Load products by store');
-    /*isLoading = true;
-    notifyListeners();*/
 
-    Uri url = Uri.https(_baseUrl, '/productos/${store.id}.json');
+    Uri url = Uri.https(_baseUrl, '/productos/$storeId.json');
     http.Response response = await http.get(url);
 
     final Map<String, dynamic> productsMap = await json.decode(response.body);
@@ -53,7 +31,16 @@ class ProductService with ChangeNotifier {
       products.add(productTemp);
     });
 
-    isLoading = false;
-    notifyListeners();
+    return products;
+  }
+
+  void updatedProductByStore({
+    required String storeId,
+    required ProductModel product,
+  }) async {
+    Uri url = Uri.https(_baseUrl, '/productos/$storeId/${product.id}.json');
+    http.Response response = await http.put(url, body: product.toJson());
+
+    print(response.body);
   }
 }

@@ -1,6 +1,5 @@
-import 'package:ecommerce_test_app/providers/product_editform_provider.dart';
+import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:ecommerce_test_app/screens/screens.dart';
-import 'package:ecommerce_test_app/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -8,13 +7,13 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
-        create: (context) => ProductService(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => StoreService(),
+        create: (context) => ProductProvider(),
       ),
       ChangeNotifierProvider(
         create: (context) => ProductEditFormProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => StoreProvider(),
       ),
     ],
     child: const MyApp(),

@@ -1,5 +1,7 @@
+import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:ecommerce_test_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductEditScreen extends StatelessWidget {
   const ProductEditScreen({
@@ -8,8 +10,9 @@ class ProductEditScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*ProductModel product =
-        ModalRoute.of(context)?.settings.arguments as ProductModel;*/
+    final formProvider = Provider.of<ProductEditFormProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
+    final storeProvider = Provider.of<StoreProvider>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -26,7 +29,18 @@ class ProductEditScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          if (formProvider.isValidForm() == true) {
+            productProvider.updatedProductByStoreFromService(
+              storeId: storeProvider.selectedStore.id,
+            );
+            productProvider.getProductsByStoreFromService(
+              storeId: storeProvider.selectedStore.id,
+            );
+          }
+
+          Navigator.pop(context);
+        },
         child: const Icon(Icons.save),
       ),
     );

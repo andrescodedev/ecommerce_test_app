@@ -1,6 +1,5 @@
 import 'package:ecommerce_test_app/models/models.dart';
-import 'package:ecommerce_test_app/providers/product_editform_provider.dart';
-import 'package:ecommerce_test_app/services/services.dart';
+import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +11,10 @@ class ProductEditFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productService = Provider.of<ProductService>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
     final formProvider = Provider.of<ProductEditFormProvider>(context);
 
-    ProductModel product = productService.selectedProduct;
+    ProductModel product = productProvider.selectedProduct;
 
     return Container(
       width: double.infinity,
