@@ -34,13 +34,13 @@ class ProductService {
     return products;
   }
 
-  void updatedProductByStore({
+  Future<bool> updatedProductByStore({
     required String storeId,
     required ProductModel product,
   }) async {
     Uri url = Uri.https(_baseUrl, '/productos/$storeId/${product.id}.json');
     http.Response response = await http.put(url, body: product.toJson());
 
-    print(response.body);
+    return (response.statusCode == 200) ? true : false;
   }
 }

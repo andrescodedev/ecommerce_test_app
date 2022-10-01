@@ -34,9 +34,6 @@ class ProductEditScreen extends StatelessWidget {
             productProvider.updatedProductByStoreFromService(
               storeId: storeProvider.selectedStore.id,
             );
-            productProvider.getProductsByStoreFromService(
-              storeId: storeProvider.selectedStore.id,
-            );
           }
 
           Navigator.pop(context);

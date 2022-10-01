@@ -33,6 +33,7 @@ class ProductProvider with ChangeNotifier {
   /// FUNCTIONS
   ///
   void getProductsByStoreFromService({required String storeId}) async {
+    _products.clear();
     _products = await _productService.loadProductsByStore(
       storeId: storeId,
     );
@@ -42,10 +43,19 @@ class ProductProvider with ChangeNotifier {
 
   void updatedProductByStoreFromService({
     required String storeId,
-  }) {
-    _productService.updatedProductByStore(
+  }) async {
+    bool updateSuccessful = await _productService.updatedProductByStore(
       storeId: storeId,
       product: _selectedProduct,
     );
+
+    if (updateSuccessful) {
+      int productIndex =
+          _products.indexWhere((element) => element.id == _selectedProduct.id);
+      _products[productIndex] = _selectedProduct;
+      notifyListeners();
+    } else {
+      print('No se pudo actualizar el producto');
+    }
   }
 }
