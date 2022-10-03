@@ -17,8 +17,6 @@ class ProductService {
   Future<List<ProductModel>> loadProductsByStore({
     required String storeId,
   }) async {
-    print('Load products by store');
-
     Uri url = Uri.https(_baseUrl, '/productos/$storeId.json');
     http.Response response = await http.get(url);
 
@@ -40,6 +38,16 @@ class ProductService {
   }) async {
     Uri url = Uri.https(_baseUrl, '/productos/$storeId/${product.id}.json');
     http.Response response = await http.put(url, body: product.toJson());
+
+    return (response.statusCode == 200) ? true : false;
+  }
+
+  Future<bool> createProductByStore({
+    required String storeId,
+    required ProductModel product,
+  }) async {
+    Uri url = Uri.https(_baseUrl, '/productos/$storeId.json');
+    http.Response response = await http.post(url, body: product.toJson());
 
     return (response.statusCode == 200) ? true : false;
   }

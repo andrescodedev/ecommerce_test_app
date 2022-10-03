@@ -9,9 +9,7 @@ class ProductListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Hola mundo');
     final productProvider = Provider.of<ProductProvider>(context);
-    print('Hola munde');
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +43,10 @@ class ProductListScreen extends StatelessWidget {
             ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          productProvider.selectedProduct = productProvider.setProductModel();
+          Navigator.pushNamed(context, '/edit');
+        },
       ),
     );
   }

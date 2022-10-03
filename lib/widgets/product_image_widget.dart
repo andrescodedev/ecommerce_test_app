@@ -57,7 +57,9 @@ class _BackButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: IconButton(
-        onPressed: () => Navigator.pop(context),
+        onPressed: () {
+          Navigator.pop(context);
+        },
         icon: const Icon(
           Icons.arrow_back_ios,
           color: Colors.indigo,

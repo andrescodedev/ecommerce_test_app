@@ -31,7 +31,7 @@ class ProductEditScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (formProvider.isValidForm() == true) {
-            productProvider.updatedProductByStoreFromService(
+            productProvider.createOrUpdateProduct(
               storeId: storeProvider.selectedStore.id,
             );
           }
