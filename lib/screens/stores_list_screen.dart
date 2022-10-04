@@ -30,9 +30,8 @@ class StoresListScreen extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     storeProvider.selectedStore = store;
-                    //productProvider.products.clear();
                     productProvider.getProductsByStoreFromService(
-                      storeId: store.id,
+                      storeKey: store.key as String,
                     );
                     Navigator.pushNamed(
                       context,

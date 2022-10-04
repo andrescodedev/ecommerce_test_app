@@ -15,7 +15,7 @@ class StoreService {
 
     productsMap.forEach((key, value) {
       final storeTemp = StoreModel.fromMap(value);
-      //productTemp.id = key;
+      storeTemp.key = key;
       print(storeTemp.toMap());
       stores.add(storeTemp);
     });

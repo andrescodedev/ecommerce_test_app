@@ -32,7 +32,7 @@ class ProductEditScreen extends StatelessWidget {
         onPressed: () {
           if (formProvider.isValidForm() == true) {
             productProvider.createOrUpdateProduct(
-              storeId: storeProvider.selectedStore.id,
+              storeKey: storeProvider.selectedStore.key as String,
             );
           }
 

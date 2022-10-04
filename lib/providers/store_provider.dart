@@ -8,7 +8,6 @@ class StoreProvider with ChangeNotifier {
   List<StoreModel> _stores = [];
   bool _isLoadingStores = true;
   StoreModel _selectedStore = StoreModel(
-    id: '',
     nombre: '',
     telefono: 0,
     disponible: false,
@@ -34,7 +33,7 @@ class StoreProvider with ChangeNotifier {
   }
 
   ///
-  /// FUNCTIONS
+  /// HTTP REQUEST FUNCTIONS
   ///
   void getStoresFromService() async {
     _stores = await _storeService.loadStores();

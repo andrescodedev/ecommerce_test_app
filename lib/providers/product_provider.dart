@@ -10,7 +10,6 @@ class ProductProvider with ChangeNotifier {
 
   ProductModel _selectedProduct = ProductModel(
     disponible: false,
-    id: '',
     nombre: '',
     precio: 0,
   );
@@ -33,26 +32,29 @@ class ProductProvider with ChangeNotifier {
   ///
   /// HTTP REQUEST FUNCTIONS
   ///
-  void getProductsByStoreFromService({required String storeId}) async {
+
+  /// THIS FUNCTION GETS THE PRODUCTS FROM A SINGLE STORE
+  void getProductsByStoreFromService({required String storeKey}) async {
     _products.clear();
     _products = await _productService.loadProductsByStore(
-      storeId: storeId,
+      storeKey: storeKey,
     );
     _isLoadingProducts = false;
     notifyListeners();
   }
 
+  /// THIS FUNCTION UPGRADES THE PRODUCT OF A SINGLE STORE
   void updatedProductByStoreFromService({
-    required String storeId,
+    required String storeKey,
   }) async {
     bool updateSuccessful = await _productService.updatedProductByStore(
-      storeId: storeId,
+      storeKey: storeKey,
       product: _selectedProduct,
     );
 
     if (updateSuccessful) {
-      int productIndex =
-          _products.indexWhere((element) => element.id == _selectedProduct.id);
+      int productIndex = _products
+          .indexWhere((element) => element.key == _selectedProduct.key);
       _products[productIndex] = _selectedProduct;
       notifyListeners();
     } else {
@@ -60,15 +62,17 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
+  /// THIS FUNCTION CREATES THE PRODUCT OF A SINGLE STORE
   void createProductByStoreFromService({
-    required String storeId,
+    required String storeKey,
   }) async {
     bool createSuccessful = await _productService.createProductByStore(
-      storeId: storeId,
+      storeKey: storeKey,
       product: _selectedProduct,
     );
 
     if (createSuccessful) {
+      print(_selectedProduct.key);
       _products.add(_selectedProduct);
       notifyListeners();
     } else {
@@ -82,25 +86,20 @@ class ProductProvider with ChangeNotifier {
   ProductModel setProductModel() {
     return ProductModel(
       disponible: false,
-      id: '',
       nombre: '',
       precio: 0,
     );
   }
 
-  void createOrUpdateProduct({required String storeId}) {
-    if (_selectedProduct.id.isEmpty) {
+  void createOrUpdateProduct({required String storeKey}) {
+    if (_selectedProduct.key == null) {
       createProductByStoreFromService(
-        storeId: storeId,
+        storeKey: storeKey,
       );
     } else {
       updatedProductByStoreFromService(
-        storeId: storeId,
+        storeKey: storeKey,
       );
     }
-  }
-
-  String identificationMechanism() {
-    return '';
   }
 }

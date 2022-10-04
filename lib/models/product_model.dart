@@ -3,16 +3,16 @@ import 'dart:convert';
 class ProductModel {
   ProductModel({
     required this.disponible,
-    required this.id,
     required this.nombre,
     required this.precio,
+    this.key,
     this.foto,
   });
 
-  String id;
   String nombre;
   bool disponible;
   int precio;
+  String? key;
   String? foto;
 
   factory ProductModel.fromJson(String str) =>
@@ -23,7 +23,6 @@ class ProductModel {
   factory ProductModel.fromMap(Map<String, dynamic> json) => ProductModel(
         disponible: json["disponible"],
         foto: json["foto"],
-        id: json["id"],
         nombre: json["nombre"],
         precio: json["precio"],
       );
@@ -31,7 +30,6 @@ class ProductModel {
   Map<String, dynamic> toMap() => {
         "disponible": disponible,
         "foto": foto,
-        "id": id,
         "nombre": nombre,
         "precio": precio,
       };
