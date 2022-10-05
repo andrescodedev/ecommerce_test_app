@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:ecommerce_test_app/models/models.dart';
 import 'package:ecommerce_test_app/services/services.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ class ProductProvider with ChangeNotifier {
 
   List<ProductModel> _products = [];
   bool _isLoadingProducts = true;
+  File? newPhotoFile;
 
   ProductModel _selectedProduct = ProductModel(
     disponible: false,
@@ -101,5 +103,11 @@ class ProductProvider with ChangeNotifier {
         storeKey: storeKey,
       );
     }
+  }
+
+  void updateSelectedProductPhoto({required String path}) {
+    _selectedProduct.foto = path;
+    //newPhotoFile = File.fromUri(Uri(path: path));
+    notifyListeners();
   }
 }

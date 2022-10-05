@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:ecommerce_test_app/models/models.dart';
 import 'package:ecommerce_test_app/providers/providers.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,11 +35,26 @@ class _CameraButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
     return SafeArea(
       child: Align(
         alignment: Alignment.topRight,
         child: IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            final imagePicker = ImagePicker();
+            /*final XFile? cameraPhotho =
+                await imagePicker.pickImage(source: ImageSource.camera);*/
+            final XFile? galleryPhoto =
+                await imagePicker.pickImage(source: ImageSource.gallery);
+
+            if (galleryPhoto == null) {
+              print('No se eligió ninguna foto');
+              return;
+            }
+
+            print('imagen elegida y esta es su ruta ${galleryPhoto.path}');
+            productProvider.updateSelectedProductPhoto(path: galleryPhoto.path);
+          },
           icon: const Icon(
             Icons.camera_alt,
             color: Colors.indigo,
@@ -103,13 +121,14 @@ class _ProductPhotoWidget extends StatelessWidget {
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
-          child: (productPhoto == null) ? _localImage() : _networkImage(),
+          child: _choosingProductPhoto(productPhoto: productPhoto),
         ),
       ),
     );
   }
 
-  Widget _networkImage() {
+  Widget _networkPhoto() {
+    print('Aquí está el error 01');
     return FadeInImage(
       placeholder: const AssetImage('assets/images/loading.gif'),
       image: NetworkImage(productPhoto as String),
@@ -117,11 +136,31 @@ class _ProductPhotoWidget extends StatelessWidget {
     );
   }
 
-  Widget _localImage() {
+  Widget _localPhoto() {
+    print('Aqui esta el error 02');
     return const FadeInImage(
       placeholder: AssetImage('assets/images/loading.gif'),
       image: AssetImage('assets/images/no-image.jpg'),
       fit: BoxFit.cover,
     );
+  }
+
+  Widget _mobilePhoto({required String photoFile}) {
+    print('aqui esta el error 03');
+    return Image.file(
+      File(photoFile),
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _choosingProductPhoto({required String? productPhoto}) {
+    if (productPhoto == null) {
+      return _localPhoto();
+    } else if (productPhoto.startsWith('http')) {
+      print('ENTRAMOS');
+      return _networkPhoto();
+    } else {
+      return _mobilePhoto(photoFile: productPhoto);
+    }
   }
 }
