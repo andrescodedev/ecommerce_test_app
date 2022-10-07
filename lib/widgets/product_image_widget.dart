@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:ecommerce_test_app/models/models.dart';
 import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +11,11 @@ class ProductImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productProvider = Provider.of<ProductProvider>(context);
-    ProductModel product = productProvider.selectedProduct;
-
     return Stack(
-      children: [
-        _ProductPhotoWidget(
-          productPhoto: product.foto,
-        ),
-        const _BackButtonWidget(),
-        const _CameraButtonWidget(),
+      children: const [
+        _ProductPhotoWidget(),
+        _BackButtonWidget(),
+        _CameraButtonWidget(),
       ],
     );
   }
@@ -44,7 +37,7 @@ class _CameraButtonWidget extends StatelessWidget {
             final imagePicker = ImagePicker();
             /*final XFile? cameraPhotho =
                 await imagePicker.pickImage(source: ImageSource.camera);*/
-            final XFile? galleryPhoto =
+            final galleryPhoto =
                 await imagePicker.pickImage(source: ImageSource.gallery);
 
             if (galleryPhoto == null) {
@@ -90,13 +83,12 @@ class _BackButtonWidget extends StatelessWidget {
 class _ProductPhotoWidget extends StatelessWidget {
   const _ProductPhotoWidget({
     Key? key,
-    this.productPhoto,
   }) : super(key: key);
-
-  final String? productPhoto;
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
+
     return Container(
       width: 400.0,
       height: 350.0,
@@ -121,46 +113,43 @@ class _ProductPhotoWidget extends StatelessWidget {
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
-          child: _choosingProductPhoto(productPhoto: productPhoto),
+          child: _choosingProductPhoto(productProvider.selectedProduct.foto),
         ),
       ),
     );
   }
 
-  Widget _networkPhoto() {
-    print('Aquí está el error 01');
+  Widget _networkPhoto({required String productPhoto}) {
     return FadeInImage(
       placeholder: const AssetImage('assets/images/loading.gif'),
-      image: NetworkImage(productPhoto as String),
+      image: NetworkImage(productPhoto),
       fit: BoxFit.cover,
     );
   }
 
   Widget _localPhoto() {
-    print('Aqui esta el error 02');
-    return const FadeInImage(
-      placeholder: AssetImage('assets/images/loading.gif'),
+    return const Image(
       image: AssetImage('assets/images/no-image.jpg'),
       fit: BoxFit.cover,
     );
   }
 
   Widget _mobilePhoto({required String photoFile}) {
-    print('aqui esta el error 03');
     return Image.file(
       File(photoFile),
       fit: BoxFit.cover,
     );
   }
 
-  Widget _choosingProductPhoto({required String? productPhoto}) {
+  Widget _choosingProductPhoto(String? productPhoto) {
     if (productPhoto == null) {
       return _localPhoto();
-    } else if (productPhoto.startsWith('http')) {
-      print('ENTRAMOS');
-      return _networkPhoto();
-    } else {
-      return _mobilePhoto(photoFile: productPhoto);
     }
+
+    if (productPhoto.startsWith('http')) {
+      return _networkPhoto(productPhoto: productPhoto);
+    }
+
+    return _mobilePhoto(photoFile: productPhoto);
   }
 }

@@ -8,7 +8,7 @@ class ProductProvider with ChangeNotifier {
 
   List<ProductModel> _products = [];
   bool _isLoadingProducts = true;
-  File? newPhotoFile;
+  File _newPhotoFile = File('');
 
   ProductModel _selectedProduct = ProductModel(
     disponible: false,
@@ -22,6 +22,7 @@ class ProductProvider with ChangeNotifier {
   List<ProductModel> get products => _products;
   bool get isLoadingProducts => _isLoadingProducts;
   ProductModel get selectedProduct => _selectedProduct;
+  File get newPhotoFile => _newPhotoFile;
 
   ///
   /// SETTERS
@@ -106,6 +107,7 @@ class ProductProvider with ChangeNotifier {
   }
 
   void updateSelectedProductPhoto({required String path}) {
+    _newPhotoFile = File(path);
     _selectedProduct.foto = path;
     //newPhotoFile = File.fromUri(Uri(path: path));
     notifyListeners();
