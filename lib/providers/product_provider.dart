@@ -106,10 +106,12 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  void updateSelectedProductPhoto({required String path}) {
-    _newPhotoFile = File(path);
+  void updateSelectedProductPhoto({String? path}) {
+    if (path != null) {
+      _newPhotoFile = File(path);
+    }
     _selectedProduct.foto = path;
     //newPhotoFile = File.fromUri(Uri(path: path));
-    notifyListeners();
+    //notifyListeners();
   }
 }
