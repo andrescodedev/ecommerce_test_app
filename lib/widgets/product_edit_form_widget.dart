@@ -14,7 +14,7 @@ class ProductEditFormWidget extends StatelessWidget {
     final productProvider = Provider.of<ProductProvider>(context);
     final formProvider = Provider.of<ProductEditFormProvider>(context);
 
-    ProductModel product = productProvider.selectedProduct;
+    ProductModel product = productProvider.temporaryProduct;
 
     return Container(
       width: double.infinity,
@@ -40,7 +40,9 @@ class ProductEditFormWidget extends StatelessWidget {
           children: [
             TextFormField(
               initialValue: product.nombre,
-              onChanged: (value) => product.nombre = value,
+              onChanged: (value) {
+                product.nombre = value;
+              },
               decoration: const InputDecoration(
                 hintText: 'Nombre del producto',
                 labelText: 'Nombre:',

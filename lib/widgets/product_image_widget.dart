@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ecommerce_test_app/models/models.dart';
 import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
+    ProductModel product = productProvider.temporaryProduct;
 
     return Stack(
       children: [
@@ -49,7 +51,7 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
               ),
               child: (isCameraOrGallery)
                   ? _filePhoto()
-                  : _networkOrLocalPhoto(productProvider.selectedProduct.foto),
+                  : _networkOrLocalPhoto(product.foto),
             ),
           ),
         ),
@@ -58,7 +60,6 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
           children: [
             IconButton(
               onPressed: () {
-                productProvider.updateSelectedProductPhoto(path: null);
                 Navigator.pop(context);
               },
               icon: const Icon(

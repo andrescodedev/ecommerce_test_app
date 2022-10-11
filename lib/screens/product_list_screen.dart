@@ -30,6 +30,8 @@ class ProductListScreen extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     productProvider.selectedProduct = product;
+                    productProvider.setTemporaryProduct(
+                        productProvider.selectedProductCopy());
                     Navigator.pushNamed(
                       context,
                       '/edit',
@@ -45,6 +47,8 @@ class ProductListScreen extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () {
           productProvider.selectedProduct = productProvider.setProductModel();
+          productProvider
+              .setTemporaryProduct(productProvider.selectedProductCopy());
           Navigator.pushNamed(context, '/edit');
         },
       ),

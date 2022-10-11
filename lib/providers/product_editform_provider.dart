@@ -23,6 +23,7 @@ class ProductEditFormProvider with ChangeNotifier {
   }
 
   void availabilityUpdated(bool value, ProductModel product) {
+    print(product.disponible);
     product.disponible = value;
     notifyListeners();
   }

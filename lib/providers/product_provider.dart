@@ -16,12 +16,19 @@ class ProductProvider with ChangeNotifier {
     precio: 0,
   );
 
+  ProductModel _temporaryProduct = ProductModel(
+    disponible: false,
+    nombre: '',
+    precio: 0,
+  );
+
   ///
   /// GETTERS
   ///
   List<ProductModel> get products => _products;
   bool get isLoadingProducts => _isLoadingProducts;
   ProductModel get selectedProduct => _selectedProduct;
+  ProductModel get temporaryProduct => _temporaryProduct;
   File get newPhotoFile => _newPhotoFile;
 
   ///
@@ -50,15 +57,16 @@ class ProductProvider with ChangeNotifier {
   void updatedProductByStoreFromService({
     required String storeKey,
   }) async {
+    print(_temporaryProduct.nombre);
     bool updateSuccessful = await _productService.updatedProductByStore(
       storeKey: storeKey,
-      product: _selectedProduct,
+      product: _temporaryProduct,
     );
 
     if (updateSuccessful) {
       int productIndex = _products
-          .indexWhere((element) => element.key == _selectedProduct.key);
-      _products[productIndex] = _selectedProduct;
+          .indexWhere((element) => element.key == _temporaryProduct.key);
+      _products[productIndex] = _temporaryProduct;
       notifyListeners();
     } else {
       print('No se pudo actualizar el producto');
@@ -71,12 +79,12 @@ class ProductProvider with ChangeNotifier {
   }) async {
     bool createSuccessful = await _productService.createProductByStore(
       storeKey: storeKey,
-      product: _selectedProduct,
+      product: _temporaryProduct,
     );
 
     if (createSuccessful) {
-      print(_selectedProduct.key);
-      _products.add(_selectedProduct);
+      print(_temporaryProduct.key);
+      _products.add(_temporaryProduct);
       notifyListeners();
     } else {
       print('No se pudo crear el producto');
@@ -94,8 +102,22 @@ class ProductProvider with ChangeNotifier {
     );
   }
 
+  void setTemporaryProduct(ProductModel selectedProductCopy) {
+    _temporaryProduct = selectedProductCopy;
+  }
+
+  ProductModel selectedProductCopy() {
+    return ProductModel(
+      disponible: _selectedProduct.disponible,
+      nombre: _selectedProduct.nombre,
+      precio: _selectedProduct.precio,
+      foto: _selectedProduct.foto,
+      key: _selectedProduct.key,
+    );
+  }
+
   void createOrUpdateProduct({required String storeKey}) {
-    if (_selectedProduct.key == null) {
+    if (_temporaryProduct.key == null) {
       createProductByStoreFromService(
         storeKey: storeKey,
       );
@@ -110,7 +132,7 @@ class ProductProvider with ChangeNotifier {
     if (path != null) {
       _newPhotoFile = File(path);
     }
-    _selectedProduct.foto = path;
+    _temporaryProduct.foto = path;
     //newPhotoFile = File.fromUri(Uri(path: path));
     //notifyListeners();
   }
