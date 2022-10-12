@@ -60,6 +60,7 @@ class _ProductImageWidgetState extends State<ProductImageWidget> {
           children: [
             IconButton(
               onPressed: () {
+                productProvider.photoFile = File('');
                 Navigator.pop(context);
               },
               icon: const Icon(

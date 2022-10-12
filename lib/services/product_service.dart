@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:ecommerce_test_app/models/models.dart';
 import 'package:http/http.dart' as http;
 
@@ -53,4 +54,40 @@ class ProductService {
 
     return (response.statusCode == 200) ? true : false;
   }
+
+  Future<String?> uploadPhotoToCloudinary({required File photoFile}) async {
+    final url =
+        Uri.parse('https://api.cloudinary.com/v1_1/dfhbhqzdt/image/upload');
+
+    final imageUploadRequest = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = 'ml_default'
+      ..files.add(await http.MultipartFile.fromPath('file', photoFile.path));
+
+    http.StreamedResponse streamedResponse = await imageUploadRequest.send();
+
+    if (streamedResponse.statusCode == 200) {
+      print('Imagen cargada correctamente');
+      http.Response response = await http.Response.fromStream(streamedResponse);
+      print(response.body);
+      Map<String, dynamic> secureUrl = json.decode(response.body);
+      return secureUrl['secure_url'];
+    } else {
+      print('Algo salio mal al cargar la imagen');
+      return null;
+    }
+  }
 }
+
+/*
+  var uri = Uri.https('example.com', 'create');
+var request = http.MultipartRequest('POST', uri)
+  ..fields['user'] = 'nweiz@google.com'
+  ..files.add(await http.MultipartFile.fromPath(
+      'package', 'build/package.tar.gz',
+      contentType: MediaType('application', 'x-tar')));
+var response = await request.send();
+if (response.statusCode == 200) print('Uploaded!');
+
+
+
+ */

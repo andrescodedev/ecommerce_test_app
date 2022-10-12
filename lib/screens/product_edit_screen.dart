@@ -29,8 +29,10 @@ class ProductEditScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           if (formProvider.isValidForm() == true) {
+            productProvider.temporaryProduct.foto =
+                await productProvider.uploadPhotoToCloudinaryFromService();
             productProvider.createOrUpdateProduct(
               storeKey: storeProvider.selectedStore.key as String,
             );

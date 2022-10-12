@@ -8,7 +8,7 @@ class ProductProvider with ChangeNotifier {
 
   List<ProductModel> _products = [];
   bool _isLoadingProducts = true;
-  File _newPhotoFile = File('');
+  File _photoFile = File('');
 
   ProductModel _selectedProduct = ProductModel(
     disponible: false,
@@ -29,13 +29,18 @@ class ProductProvider with ChangeNotifier {
   bool get isLoadingProducts => _isLoadingProducts;
   ProductModel get selectedProduct => _selectedProduct;
   ProductModel get temporaryProduct => _temporaryProduct;
-  File get newPhotoFile => _newPhotoFile;
+  //File get newPhotoFile => _newPhotoFile;
 
   ///
   /// SETTERS
   ///
   set selectedProduct(ProductModel product) {
     _selectedProduct = product;
+    notifyListeners();
+  }
+
+  set photoFile(File photoFile) {
+    _photoFile = photoFile;
     notifyListeners();
   }
 
@@ -57,7 +62,7 @@ class ProductProvider with ChangeNotifier {
   void updatedProductByStoreFromService({
     required String storeKey,
   }) async {
-    print(_temporaryProduct.nombre);
+    print(_temporaryProduct.foto);
     bool updateSuccessful = await _productService.updatedProductByStore(
       storeKey: storeKey,
       product: _temporaryProduct,
@@ -89,6 +94,19 @@ class ProductProvider with ChangeNotifier {
     } else {
       print('No se pudo crear el producto');
     }
+  }
+
+  /// THIS FUNCTION ALLOW TO UPLOAD THE PHOTO ON CLOUDINARIE'S SERVICE
+  Future<String?> uploadPhotoToCloudinaryFromService() async {
+    String? photoUrl =
+        await _productService.uploadPhotoToCloudinary(photoFile: _photoFile);
+
+    if (photoUrl != null) {
+      _photoFile = File('');
+    }
+
+    print(photoUrl);
+    return photoUrl;
   }
 
   ///
@@ -128,11 +146,8 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  void updateSelectedProductPhoto({String? path}) {
-    if (path != null) {
-      _newPhotoFile = File(path);
-    }
-    _temporaryProduct.foto = path;
+  void updateSelectedProductPhoto({required String path}) {
+    _photoFile = File(path);
     //newPhotoFile = File.fromUri(Uri(path: path));
     //notifyListeners();
   }
