@@ -29,7 +29,7 @@ class ProductProvider with ChangeNotifier {
   bool get isLoadingProducts => _isLoadingProducts;
   ProductModel get selectedProduct => _selectedProduct;
   ProductModel get temporaryProduct => _temporaryProduct;
-  //File get newPhotoFile => _newPhotoFile;
+  File get photoFile => _photoFile;
 
   ///
   /// SETTERS
