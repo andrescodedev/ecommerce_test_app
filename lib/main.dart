@@ -42,11 +42,13 @@ class MyApp extends StatelessWidget {
           elevation: 0.0,
         ),
       ),
-      initialRoute: '/stores',
+      initialRoute: '/signup',
       routes: {
         '/products': (context) => const ProductListScreen(),
         '/edit': (context) => const ProductEditScreen(),
         '/stores': (context) => const StoresListScreen(),
+        '/signup': (context) => const SignUpScreen(),
+        '/signin': (context) => const SignInScreen(),
       },
     );
   }
