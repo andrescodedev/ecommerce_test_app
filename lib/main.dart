@@ -15,6 +15,9 @@ void main() {
       ChangeNotifierProvider(
         create: (context) => StoreProvider(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => SignUpInProvider(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -40,6 +43,21 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Colors.indigo,
           elevation: 0.0,
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.indigo,
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          labelStyle: TextStyle(
+            color: Colors.indigo,
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.indigo,
+              width: 5.0,
+            ),
+          ),
         ),
       ),
       initialRoute: '/signup',

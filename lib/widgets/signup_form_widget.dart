@@ -1,4 +1,6 @@
+import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignUpFormWidget extends StatelessWidget {
   const SignUpFormWidget({Key? key}) : super(key: key);
@@ -6,6 +8,7 @@ class SignUpFormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    final formProvider = Provider.of<SignUpInProvider>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -27,6 +30,8 @@ class SignUpFormWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30.0),
               ),
               child: Form(
+                key: formProvider.signUpFormKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -38,6 +43,7 @@ class SignUpFormWidget extends StatelessWidget {
                       ),
                     ),
                     TextFormField(
+                      enabled: (formProvider.formInProcess) ? false : true,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(
                           Icons.storefront_rounded,
@@ -47,13 +53,11 @@ class SignUpFormWidget extends StatelessWidget {
                         labelText: 'Nombre:',
                       ),
                       onChanged: (value) {},
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'El nombre de la tienda es obligatorio';
-                        }
-                      },
+                      validator: (value) =>
+                          formProvider.validateStoreName(value),
                     ),
                     TextFormField(
+                      enabled: (formProvider.formInProcess) ? false : true,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         hintText: 'Correo electrónico',
@@ -64,13 +68,10 @@ class SignUpFormWidget extends StatelessWidget {
                         ),
                       ),
                       onChanged: (value) {},
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'El email es obligatorio';
-                        }
-                      },
+                      validator: (value) => formProvider.validateEmail(value),
                     ),
                     TextFormField(
+                      enabled: (formProvider.formInProcess) ? false : true,
                       obscureText: true,
                       decoration: const InputDecoration(
                         hintText: 'Contraseña',
@@ -81,11 +82,8 @@ class SignUpFormWidget extends StatelessWidget {
                         ),
                       ),
                       onChanged: (value) {},
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'La contraseña es obligatoria';
-                        }
-                      },
+                      validator: (value) =>
+                          formProvider.validatePassword(value),
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -104,8 +102,48 @@ class SignUpFormWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: const Text('Sign Up'),
-                      onPressed: () {},
+                      child: (formProvider.formInProcess)
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.0,
+                            )
+                          : const Text('Registrar'),
+                      onPressed: (formProvider.formInProcess)
+                          ? null
+                          : () async {
+                              if (await formProvider.validateSignUpForm() ==
+                                  true) {
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  '/stores',
+                                );
+                              }
+                            },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '¿Ya tienes una cuenta?',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pushReplacementNamed(
+                            context,
+                            '/signin',
+                          ),
+                          child: const Text(
+                            'Iniciar sesión',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.indigo,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

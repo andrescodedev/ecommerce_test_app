@@ -9,16 +9,19 @@ class SignUpScreen extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SizedBox(
-        width: screenSize.width,
-        height: screenSize.height,
-        child: Stack(
-          children: const [
-            BackgroundSignInUpWidget(),
-            LogoStoreWidget(),
-            SignUpFormWidget(),
-          ],
+      body: GestureDetector(
+        child: SizedBox(
+          width: screenSize.width,
+          height: screenSize.height,
+          child: Stack(
+            children: const [
+              BackgroundSignInUpWidget(),
+              LogoStoreWidget(),
+              SignUpFormWidget(),
+            ],
+          ),
         ),
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       ),
     );
   }

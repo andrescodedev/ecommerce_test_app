@@ -88,8 +88,33 @@ class SignInFormWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: const Text('Sign In'),
+                      child: const Text('Iniciar sesión'),
                       onPressed: () {},
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '¿No tienes una cuenta?',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pushReplacementNamed(
+                            context,
+                            '/signup',
+                          ),
+                          child: const Text(
+                            'Crear cuenta',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.indigo,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
