@@ -1,4 +1,6 @@
+import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignInFormWidget extends StatelessWidget {
   const SignInFormWidget({Key? key}) : super(key: key);
@@ -6,6 +8,7 @@ class SignInFormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    final formProvider = Provider.of<SignUpInProvider>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -17,7 +20,7 @@ class SignInFormWidget extends StatelessWidget {
             alignment: Alignment.center,
             child: Container(
               width: screenSize.width * 0.8,
-              height: screenSize.height * 0.5,
+              height: screenSize.height * 0.6,
               padding: const EdgeInsets.symmetric(
                 horizontal: 10.0,
                 vertical: 5.0,
@@ -27,6 +30,8 @@ class SignInFormWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30.0),
               ),
               child: Form(
+                key: formProvider.signInFormKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -38,6 +43,7 @@ class SignInFormWidget extends StatelessWidget {
                       ),
                     ),
                     TextFormField(
+                      enabled: (formProvider.formInProcess) ? false : true,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         hintText: 'Correo electrónico',
@@ -48,13 +54,10 @@ class SignInFormWidget extends StatelessWidget {
                         ),
                       ),
                       onChanged: (value) {},
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'El email es obligatorio';
-                        }
-                      },
+                      validator: (value) => formProvider.validateEmail(value),
                     ),
                     TextFormField(
+                      enabled: (formProvider.formInProcess) ? false : true,
                       obscureText: true,
                       decoration: const InputDecoration(
                         hintText: 'Contraseña',
@@ -65,11 +68,8 @@ class SignInFormWidget extends StatelessWidget {
                         ),
                       ),
                       onChanged: (value) {},
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'La contraseña es obligatoria';
-                        }
-                      },
+                      validator: (value) =>
+                          formProvider.validatePassword(value),
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -88,8 +88,23 @@ class SignInFormWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: const Text('Iniciar sesión'),
-                      onPressed: () {},
+                      child: (formProvider.formInProcess)
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.0,
+                            )
+                          : const Text('Iniciar sesión'),
+                      onPressed: (formProvider.formInProcess)
+                          ? null
+                          : () async {
+                              if (await formProvider.validateSignInForm() ==
+                                  true) {
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  '/stores',
+                                );
+                              }
+                            },
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

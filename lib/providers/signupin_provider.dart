@@ -35,6 +35,18 @@ class SignUpInProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> validateSignInForm() async {
+    if (_signInFormKey.currentState?.validate() == true) {
+      formInProcess = true;
+      FocusManager.instance.primaryFocus?.unfocus();
+      await Future.delayed(const Duration(seconds: 3));
+      return true;
+    } else {
+      print('Formulario incorrecto');
+      return false;
+    }
+  }
+
   String? validateStoreName(String? value) {
     if (value != null && value != '') {
       return null;
