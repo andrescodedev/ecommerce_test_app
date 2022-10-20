@@ -5,11 +5,15 @@ class SignUpInProvider extends ChangeNotifier {
   final GlobalKey<FormState> _signInFormKey = GlobalKey<FormState>();
 
   bool _formInProcess = false;
+  String _email = '';
+  String _password = '';
 
   /// GETTERS
   GlobalKey<FormState> get signUpFormKey => _signUpFormKey;
   GlobalKey<FormState> get signInFormKey => _signInFormKey;
   bool get formInProcess => _formInProcess;
+  String get email => _email;
+  String get password => _password;
 
   ///SETTERS
   set formInProcess(bool value) {
@@ -22,17 +26,17 @@ class SignUpInProvider extends ChangeNotifier {
       return true;
     }
   }*/
+  void setEmail(String value) {
+    _email = value;
+  }
 
-  Future<bool> validateSignUpForm() async {
-    if (_signUpFormKey.currentState?.validate() == true) {
-      formInProcess = true;
-      FocusManager.instance.primaryFocus?.unfocus();
-      await Future.delayed(const Duration(seconds: 3));
-      return true;
-    } else {
-      print('Formulario incorrecto');
-      return false;
-    }
+  void setPassword(String value) {
+    _password = value;
+  }
+
+  bool? validateSignUpForm() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    return _signUpFormKey.currentState?.validate();
   }
 
   Future<bool> validateSignInForm() async {

@@ -18,6 +18,9 @@ void main() {
       ChangeNotifierProvider(
         create: (context) => SignUpInProvider(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => AuthenticationProvider(),
+      ),
     ],
     child: const MyApp(),
   ));
