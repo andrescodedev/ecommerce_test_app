@@ -1,4 +1,5 @@
 import 'package:ecommerce_test_app/providers/providers.dart';
+import 'package:ecommerce_test_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,7 @@ class SignUpFormWidget extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
     final formProvider = Provider.of<SignUpInProvider>(context);
     final authProvider = Provider.of<AuthenticationProvider>(context);
+    print('Reconstruimos el widget');
 
     return SingleChildScrollView(
       child: Column(
@@ -61,17 +63,18 @@ class SignUpFormWidget extends StatelessWidget {
                       TextFormField(
                         enabled: (formProvider.formInProcess) ? false : true,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Correo electrónico',
                           labelText: 'Correo electrónico:',
-                          errorText: authProvider.errorMessage,
-                          prefixIcon: const Icon(
+                          prefixIcon: Icon(
                             Icons.email,
                             color: Colors.indigo,
                           ),
                         ),
                         onChanged: (value) => formProvider.setEmail(value),
-                        validator: (value) => formProvider.validateEmail(value),
+                        validator: (value) => (authProvider.emailError == true)
+                            ? authProvider.emailAlreadyExists()
+                            : formProvider.validateEmail(value),
                       ),
                       TextFormField(
                         enabled: (formProvider.formInProcess) ? false : true,
@@ -122,8 +125,7 @@ class SignUpFormWidget extends StatelessWidget {
                                     password: formProvider.password,
                                   );
 
-                                  print('validamos error message');
-                                  if (authProvider.errorMessage != null) {
+                                  if (authProvider.emailError == true) {
                                     formProvider.formInProcess = false;
                                   } else {
                                     Navigator.pushReplacementNamed(

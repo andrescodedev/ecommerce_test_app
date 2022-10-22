@@ -9,6 +9,7 @@ class SignInFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     final formProvider = Provider.of<SignUpInProvider>(context);
+    final authProvider = Provider.of<AuthenticationProvider>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -53,8 +54,10 @@ class SignInFormWidget extends StatelessWidget {
                           color: Colors.indigo,
                         ),
                       ),
-                      onChanged: (value) {},
-                      validator: (value) => formProvider.validateEmail(value),
+                      onChanged: (value) => formProvider.setEmail(value),
+                      validator: (value) => (authProvider.emailError == true)
+                          ? authProvider.emailNotFound()
+                          : formProvider.validateEmail(value),
                     ),
                     TextFormField(
                       enabled: (formProvider.formInProcess) ? false : true,
@@ -67,9 +70,10 @@ class SignInFormWidget extends StatelessWidget {
                           color: Colors.indigo,
                         ),
                       ),
-                      onChanged: (value) {},
-                      validator: (value) =>
-                          formProvider.validatePassword(value),
+                      onChanged: (value) => formProvider.setPassword(value),
+                      validator: (value) => (authProvider.passwordError == true)
+                          ? authProvider.invalidPassword()
+                          : formProvider.validatePassword(value),
                     ),
                     const SizedBox(
                       height: 20.0,
@@ -97,12 +101,23 @@ class SignInFormWidget extends StatelessWidget {
                       onPressed: (formProvider.formInProcess)
                           ? null
                           : () async {
-                              if (await formProvider.validateSignInForm() ==
-                                  true) {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  '/stores',
+                              if (formProvider.validateSignInForm() == true) {
+                                formProvider.formInProcess = true;
+                                await authProvider
+                                    .signInAnUserFromTheAuthService(
+                                  email: formProvider.email,
+                                  password: formProvider.password,
                                 );
+
+                                if (authProvider.emailError == true ||
+                                    authProvider.passwordError == true) {
+                                  formProvider.formInProcess = false;
+                                } else {
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    '/stores',
+                                  );
+                                }
                               }
                             },
                     ),
