@@ -63,13 +63,14 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/signup',
+      initialRoute: '/splash',
       routes: {
         '/products': (context) => const ProductListScreen(),
         '/edit': (context) => const ProductEditScreen(),
         '/stores': (context) => const StoresListScreen(),
         '/signup': (context) => const SignUpScreen(),
         '/signin': (context) => const SignInScreen(),
+        '/splash': (context) => const SplashScreen(),
       },
     );
   }
