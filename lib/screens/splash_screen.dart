@@ -1,5 +1,5 @@
+import 'package:ecommerce_test_app/utils/secure_storage/secure_storage_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -9,7 +9,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final secureStorage = const FlutterSecureStorage();
+  final secureStorage = SecureStorageUtil();
 
   @override
   void initState() {
@@ -17,11 +17,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
     super.initState();
     Future.delayed(const Duration(seconds: 5), () async {
-      userToken = await secureStorage.read(key: 'userToken') ?? '';
+      userToken = await secureStorage.tokenRead();
 
       (userToken.isEmpty)
           ? Navigator.pushReplacementNamed(context, '/signin')
-          : Navigator.pushReplacementNamed(context, '/stores');
+          : Navigator.pushReplacementNamed(context, '/dashboard');
     });
   }
 

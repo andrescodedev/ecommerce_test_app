@@ -92,9 +92,9 @@ class AuthenticationService {
     return responseMessage;
   }
 
-  Future logOutAnUser() async {
+  /*Future logOutAnUser() async {
     await secureStorage.delete(key: 'userToken');
-  }
+  }*/
 
   /*Future<String> tokenCheck() async {
     return await secureStorage.read(key: 'userToken') ?? '';
