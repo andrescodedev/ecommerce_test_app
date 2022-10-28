@@ -36,7 +36,7 @@ class ProductEditScreen extends StatelessWidget {
                   await productProvider.uploadPhotoToCloudinaryFromService();
             }
             productProvider.createOrUpdateProduct(
-              storeKey: storeProvider.selectedStore.key as String,
+              storeKey: storeProvider.authenticatedStore?.key as String,
             );
           }
 

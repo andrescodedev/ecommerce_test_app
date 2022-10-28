@@ -4,24 +4,47 @@ import 'package:flutter/material.dart';
 class AuthenticationProvider extends ChangeNotifier {
   final AuthenticationService _authService = AuthenticationService();
 
-  bool _emailError = false;
-  bool _passwordError = false;
+  String _storeEmail = '';
+  String _storeUid = '';
   String _emailNotFound = '';
   String _emailExists = '';
   String _invalidPassword = '';
+  String _operationNotAllowed = '';
+  String _tooManyAttemptsTryLater = '';
+
+  bool _emailError = false;
+  bool _passwordError = false;
+  bool _responseError = false;
 
   ///GETTERS
+  String get storeEmail => _storeEmail;
+  String get storeUid => _storeUid;
   bool get emailError => _emailError;
   bool get passwordError => _passwordError;
+  bool get responseError => _responseError;
 
-  Future signUpAnUserFromTheAuthService(
+  ///
+  /// PROVIDER METHODS FOR HTTPS SERVICE METHODS
+  ///
+  Future signUpAnUserProvider(
       {required String email, required String password}) async {
-    String? response =
+    dynamic serviceResponse =
         await _authService.signUpAnUser(email: email, password: password);
 
-    if (response != null) {
+    if (serviceResponse == 'EMAIL_EXISTS') {
       _emailError = true;
-      _emailExists = response;
+      _responseError = true;
+      _emailExists = 'Este correo electrónico ya existe';
+    } else if (serviceResponse == 'OPERATION_NOT_ALLOWED') {
+      _responseError = true;
+      _operationNotAllowed = 'Registro con contraseña está inhabilitado';
+    } else if (serviceResponse == 'TOO_MANY_ATTEMPTS_TRY_LATER') {
+      _responseError = true;
+      _tooManyAttemptsTryLater =
+          'Hemos bloqueado todas las solicitudes. Intente mas tarde';
+    } else {
+      _storeEmail = serviceResponse['email'];
+      _storeUid = serviceResponse['localId'];
     }
   }
 
@@ -52,5 +75,13 @@ class AuthenticationProvider extends ChangeNotifier {
   String invalidPassword() {
     _passwordError = false;
     return _invalidPassword;
+  }
+
+  String operationNotAllowed() {
+    return _operationNotAllowed;
+  }
+
+  String tooManyAttemptsTryLater() {
+    return _tooManyAttemptsTryLater;
   }
 }

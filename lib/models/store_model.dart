@@ -3,17 +3,26 @@ import 'dart:convert';
 class StoreModel {
   StoreModel({
     required this.nombre,
-    required this.telefono,
-    required this.disponible,
+    required this.email,
     this.key,
+    this.tipoDeNegocio,
+    this.descripcion,
+    this.direccion,
+    this.telefono,
     this.foto,
+    this.disponible,
   });
 
   String nombre;
-  int telefono;
-  bool disponible;
+  String email;
+
   String? key;
+  String? tipoDeNegocio;
+  String? descripcion;
+  String? direccion;
+  int? telefono;
   String? foto;
+  bool? disponible;
 
   factory StoreModel.fromJson(String str) =>
       StoreModel.fromMap(json.decode(str));
@@ -21,16 +30,24 @@ class StoreModel {
   String toJson() => json.encode(toMap());
 
   factory StoreModel.fromMap(Map<String, dynamic> json) => StoreModel(
-        disponible: json["disponible"],
-        foto: json["foto"],
         nombre: json["nombre"],
-        telefono: json["telefono"],
+        email: json["email"],
+        tipoDeNegocio: json['tipo_de_negocio'],
+        descripcion: json["descripcion"],
+        direccion: json["direccion"],
+        telefono: json['telefono'],
+        foto: json["foto"],
+        disponible: json["disponible"],
       );
 
   Map<String, dynamic> toMap() => {
-        "disponible": disponible,
-        "foto": foto,
         "nombre": nombre,
+        "email": email,
+        "tipo_de_negocio": tipoDeNegocio,
+        "descripcion": descripcion,
+        "direccion": direccion,
         "telefono": telefono,
+        "foto": foto,
+        "disponible": disponible,
       };
 }

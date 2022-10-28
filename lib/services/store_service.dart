@@ -5,9 +5,8 @@ import 'package:http/http.dart' as http;
 class StoreService {
   final String _baseUrl =
       'ecommerce-test-app-a9cf5-default-rtdb.firebaseio.com';
-  final List<StoreModel> stores = [];
 
-  Future<List<StoreModel>> loadStores() async {
+  /*Future<List<StoreModel>> loadStores() async {
     Uri url = Uri.https(_baseUrl, '/tiendas.json');
     http.Response response = await http.get(url);
 
@@ -21,5 +20,26 @@ class StoreService {
     });
 
     return stores;
+  }*/
+
+  Future<StoreModel?> storeCreateService({
+    required String storeUid,
+    required String storeEmail,
+    required String storeName,
+  }) async {
+    Uri url = Uri.https(_baseUrl, '/tiendas/$storeUid.json');
+    Map<String, dynamic> newStore = {
+      'nombre': storeName,
+      'email': storeEmail,
+    };
+
+    http.Response response = await http.patch(url, body: json.encode(newStore));
+
+    if (response.statusCode == 200) {
+      StoreModel storeCreated = StoreModel.fromJson(response.body);
+      return storeCreated;
+    } else {
+      return null;
+    }
   }
 }

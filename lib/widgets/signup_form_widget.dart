@@ -1,5 +1,4 @@
 import 'package:ecommerce_test_app/providers/providers.dart';
-import 'package:ecommerce_test_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +10,7 @@ class SignUpFormWidget extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
     final formProvider = Provider.of<SignUpInProvider>(context);
     final authProvider = Provider.of<AuthenticationProvider>(context);
-    print('Reconstruimos el widget');
+    final storeProvider = Provider.of<StoreProvider>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -56,7 +55,7 @@ class SignUpFormWidget extends StatelessWidget {
                           hintText: 'Nombre de la tienda',
                           labelText: 'Nombre:',
                         ),
-                        onChanged: (value) {},
+                        onChanged: (value) => storeProvider.setStoreName(value),
                         validator: (value) =>
                             formProvider.validateStoreName(value),
                       ),
@@ -119,22 +118,33 @@ class SignUpFormWidget extends StatelessWidget {
                             : () async {
                                 if (formProvider.validateSignUpForm() == true) {
                                   formProvider.formInProcess = true;
-                                  await authProvider
-                                      .signUpAnUserFromTheAuthService(
+                                  await authProvider.signUpAnUserProvider(
                                     email: formProvider.email,
                                     password: formProvider.password,
                                   );
 
-                                  if (authProvider.emailError == true) {
+                                  if (authProvider.responseError == true) {
                                     formProvider.formInProcess = false;
                                   } else {
-                                    Navigator.pushReplacementNamed(
-                                      context,
-                                      '/stores',
+                                    await storeProvider.storeCreateProvider(
+                                      storeEmail: authProvider.storeEmail,
+                                      storeUid: authProvider.storeUid,
                                     );
+
+                                    if (storeProvider.storeStatus == true) {
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        '/dashboard',
+                                      );
+                                    }
                                   }
                                 }
                               },
+                      ),
+                      Text(
+                        (storeProvider.storeStatus)
+                            ? ''
+                            : storeProvider.statusErrorMessage,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

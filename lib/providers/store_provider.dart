@@ -5,39 +5,50 @@ import 'package:flutter/material.dart';
 class StoreProvider with ChangeNotifier {
   final StoreService _storeService = StoreService();
 
-  List<StoreModel> _stores = [];
-  bool _isLoadingStores = true;
-  StoreModel _selectedStore = StoreModel(
-    nombre: '',
-    telefono: 0,
-    disponible: false,
-  );
-
-  StoreProvider() {
-    getStoresFromService();
-  }
+  String _storeName = '';
+  String _statusErrorMessage = '';
+  bool _storeStatus = true;
+  StoreModel? _authenticatedStore;
 
   ///
   /// GETTERS
   ///
-  List<StoreModel> get stores => _stores;
-  StoreModel get selectedStore => _selectedStore;
-  bool get isLoadingStores => _isLoadingStores;
+  String get storeName => _storeName;
+  String get statusErrorMessage => _statusErrorMessage;
+  StoreModel? get authenticatedStore => _authenticatedStore;
+  bool get storeStatus => _storeStatus;
 
   ///
   /// SETTERS
   ///
-  set selectedStore(StoreModel store) {
-    _selectedStore = store;
+  /*set authenticatedStore(StoreModel? store) {
+    _authenticatedStore = store;
     notifyListeners();
-  }
+  }*/
 
   ///
   /// HTTP REQUEST FUNCTIONS
   ///
-  void getStoresFromService() async {
-    _stores = await _storeService.loadStores();
-    _isLoadingStores = false;
-    notifyListeners();
+  Future storeCreateProvider({
+    required String storeUid,
+    required String storeEmail,
+  }) async {
+    _authenticatedStore = await _storeService.storeCreateService(
+      storeUid: storeUid,
+      storeEmail: storeEmail,
+      storeName: _storeName,
+    );
+
+    if (_authenticatedStore == null) {
+      _storeStatus = false;
+      _statusErrorMessage = 'La operación no fue exítosa';
+    }
+  }
+
+  ///
+  /// Auxiliar functions
+  ///
+  void setStoreName(String storeName) {
+    _storeName = storeName;
   }
 }
