@@ -10,6 +10,7 @@ class SignInFormWidget extends StatelessWidget {
     Size screenSize = MediaQuery.of(context).size;
     final formProvider = Provider.of<SignUpInProvider>(context);
     final authProvider = Provider.of<AuthenticationProvider>(context);
+    final storeProvider = Provider.of<StoreProvider>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -55,9 +56,10 @@ class SignInFormWidget extends StatelessWidget {
                         ),
                       ),
                       onChanged: (value) => formProvider.setEmail(value),
-                      validator: (value) => (authProvider.emailError == true)
-                          ? authProvider.emailNotFound()
-                          : formProvider.validateEmail(value),
+                      validator: (value) =>
+                          (authProvider.emailErrorOrAccountError == true)
+                              ? authProvider.emailNotFoundOrDisabledAccount()
+                              : formProvider.validateEmail(value),
                     ),
                     TextFormField(
                       enabled: (formProvider.formInProcess) ? false : true,
@@ -103,20 +105,28 @@ class SignInFormWidget extends StatelessWidget {
                           : () async {
                               if (formProvider.validateSignInForm() == true) {
                                 formProvider.formInProcess = true;
-                                await authProvider
-                                    .signInAnUserFromTheAuthService(
+                                await authProvider.signInAnUserProvider(
                                   email: formProvider.email,
                                   password: formProvider.password,
                                 );
 
-                                if (authProvider.emailError == true ||
+                                if (authProvider.emailErrorOrAccountError ==
+                                        true ||
                                     authProvider.passwordError == true) {
                                   formProvider.formInProcess = false;
                                 } else {
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    '/stores',
+                                  await storeProvider
+                                      .authenticatedStoreProvider(
+                                    storeUid: authProvider.storeUid,
                                   );
+
+                                  if (storeProvider.authenticateStatus ==
+                                      true) {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      '/dashboard',
+                                    );
+                                  }
                                 }
                               }
                             },

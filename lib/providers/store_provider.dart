@@ -6,17 +6,17 @@ class StoreProvider with ChangeNotifier {
   final StoreService _storeService = StoreService();
 
   String _storeName = '';
-  String _statusErrorMessage = '';
-  bool _storeStatus = true;
+  String _authenticateStatusErrorMessage = '';
+  bool _authenticateStatus = true;
   StoreModel? _authenticatedStore;
 
   ///
   /// GETTERS
   ///
   String get storeName => _storeName;
-  String get statusErrorMessage => _statusErrorMessage;
+  String get authenticateStatusErrorMessage => _authenticateStatusErrorMessage;
   StoreModel? get authenticatedStore => _authenticatedStore;
-  bool get storeStatus => _storeStatus;
+  bool get authenticateStatus => _authenticateStatus;
 
   ///
   /// SETTERS
@@ -40,8 +40,20 @@ class StoreProvider with ChangeNotifier {
     );
 
     if (_authenticatedStore == null) {
-      _storeStatus = false;
-      _statusErrorMessage = 'La operación no fue exítosa';
+      _authenticateStatus = false;
+      _authenticateStatusErrorMessage = 'La operación no fue exitosa';
+    }
+  }
+
+  Future authenticatedStoreProvider({
+    required String storeUid,
+  }) async {
+    _authenticatedStore =
+        await _storeService.authenticatedStoreService(storeUid: storeUid);
+
+    if (_authenticatedStore == null) {
+      _authenticateStatus = false;
+      _authenticateStatusErrorMessage = 'La operación no fue exitosa';
     }
   }
 

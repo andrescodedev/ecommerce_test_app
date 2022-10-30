@@ -47,14 +47,13 @@ class AuthenticationService {
     }
   }
 
-  Future<String?> signInAnUser({
+  Future<dynamic> signInAnUser({
     required String email,
     required String password,
   }) async {
-    String? responseMessage;
-    Map<String, dynamic> signInWithPasswordResponse = {};
+    Map<String, dynamic> signInServiceResponse = {};
 
-    Map<String, dynamic> storeEmailPassword = {
+    Map<String, dynamic> storeCredentials = {
       'email': email,
       'password': password,
     };
@@ -69,26 +68,23 @@ class AuthenticationService {
 
     try {
       http.Response requestResponse =
-          await http.post(url, body: json.encode(storeEmailPassword));
+          await http.post(url, body: json.encode(storeCredentials));
+
+      signInServiceResponse = json.decode(requestResponse.body);
+
       if (requestResponse.statusCode == 200) {
-        Map<String, dynamic> authServiceResponse =
-            json.decode(requestResponse.body);
-
         await secureStorage.write(
-            key: 'userToken', value: authServiceResponse['idToken']);
+          key: 'userToken',
+          value: signInServiceResponse['idToken'],
+        );
 
-        print(requestResponse.body);
-        responseMessage = null;
+        return signInServiceResponse;
       } else if (requestResponse.statusCode == 400) {
-        signInWithPasswordResponse = json.decode(requestResponse.body);
-        responseMessage = signInWithPasswordResponse['error']['message'];
-        print(signInWithPasswordResponse);
+        return signInServiceResponse['error']['message'];
       }
     } catch (e) {
-      responseMessage = 'Problemas al realizar la petición';
+      return 'No se pudo realizar la petición. Revisa tu conexión de internet';
     }
-
-    return responseMessage;
   }
 
   /*Future logOutAnUser() async {

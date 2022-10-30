@@ -42,4 +42,18 @@ class StoreService {
       return null;
     }
   }
+
+  Future<StoreModel?> authenticatedStoreService({
+    required String storeUid,
+  }) async {
+    Uri url = Uri.https(_baseUrl, '/tiendas/$storeUid.json');
+
+    http.Response response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return StoreModel.fromJson(response.body);
+    } else {
+      return null;
+    }
+  }
 }

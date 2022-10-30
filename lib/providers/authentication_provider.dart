@@ -6,33 +6,35 @@ class AuthenticationProvider extends ChangeNotifier {
 
   String _storeEmail = '';
   String _storeUid = '';
-  String _emailNotFound = '';
+  String _emailNotFoundOrDisabledAccount = '';
   String _emailExists = '';
   String _invalidPassword = '';
   String _operationNotAllowed = '';
   String _tooManyAttemptsTryLater = '';
 
-  bool _emailError = false;
+  bool _emailErrorOrAccountError = false;
   bool _passwordError = false;
   bool _responseError = false;
 
   ///GETTERS
   String get storeEmail => _storeEmail;
   String get storeUid => _storeUid;
-  bool get emailError => _emailError;
+  bool get emailErrorOrAccountError => _emailErrorOrAccountError;
   bool get passwordError => _passwordError;
   bool get responseError => _responseError;
 
   ///
   /// PROVIDER METHODS FOR HTTPS SERVICE METHODS
   ///
-  Future signUpAnUserProvider(
-      {required String email, required String password}) async {
+  Future signUpAnUserProvider({
+    required String email,
+    required String password,
+  }) async {
     dynamic serviceResponse =
         await _authService.signUpAnUser(email: email, password: password);
 
     if (serviceResponse == 'EMAIL_EXISTS') {
-      _emailError = true;
+      _emailErrorOrAccountError = true;
       _responseError = true;
       _emailExists = 'Este correo electrónico ya existe';
     } else if (serviceResponse == 'OPERATION_NOT_ALLOWED') {
@@ -48,28 +50,35 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  Future signInAnUserFromTheAuthService(
-      {required String email, required String password}) async {
-    String? response =
+  Future signInAnUserProvider({
+    required String email,
+    required String password,
+  }) async {
+    dynamic serviceResponse =
         await _authService.signInAnUser(email: email, password: password);
 
-    if (response != null && response == 'EMAIL_NOT_FOUND') {
-      _emailError = true;
-      _emailNotFound = 'Correo electrónico incorrecto';
-    } else if (response != null && response == 'INVALID_PASSWORD') {
+    if (serviceResponse == 'EMAIL_NOT_FOUND') {
+      _emailErrorOrAccountError = true;
+      _emailNotFoundOrDisabledAccount = 'Correo electrónico incorrecto';
+    } else if (serviceResponse == 'INVALID_PASSWORD') {
       _passwordError = true;
       _invalidPassword = 'Contraseña incorrecta';
+    } else if (serviceResponse == 'USER_DISABLED') {
+      _emailErrorOrAccountError = true;
+      _emailNotFoundOrDisabledAccount = 'Su cuenta ha sido desactivada';
+    } else {
+      _storeUid = serviceResponse['localId'];
     }
   }
 
   String emailAlreadyExists() {
-    _emailError = false;
+    _emailErrorOrAccountError = false;
     return _emailExists;
   }
 
-  String emailNotFound() {
-    _emailError = false;
-    return _emailNotFound;
+  String emailNotFoundOrDisabledAccount() {
+    _emailErrorOrAccountError = false;
+    return _emailNotFoundOrDisabledAccount;
   }
 
   String invalidPassword() {

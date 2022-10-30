@@ -71,9 +71,10 @@ class SignUpFormWidget extends StatelessWidget {
                           ),
                         ),
                         onChanged: (value) => formProvider.setEmail(value),
-                        validator: (value) => (authProvider.emailError == true)
-                            ? authProvider.emailAlreadyExists()
-                            : formProvider.validateEmail(value),
+                        validator: (value) =>
+                            (authProvider.emailErrorOrAccountError == true)
+                                ? authProvider.emailAlreadyExists()
+                                : formProvider.validateEmail(value),
                       ),
                       TextFormField(
                         enabled: (formProvider.formInProcess) ? false : true,
@@ -131,7 +132,8 @@ class SignUpFormWidget extends StatelessWidget {
                                       storeUid: authProvider.storeUid,
                                     );
 
-                                    if (storeProvider.storeStatus == true) {
+                                    if (storeProvider.authenticateStatus ==
+                                        true) {
                                       Navigator.pushReplacementNamed(
                                         context,
                                         '/dashboard',
@@ -142,9 +144,9 @@ class SignUpFormWidget extends StatelessWidget {
                               },
                       ),
                       Text(
-                        (storeProvider.storeStatus)
+                        (storeProvider.authenticateStatus)
                             ? ''
-                            : storeProvider.statusErrorMessage,
+                            : storeProvider.authenticateStatusErrorMessage,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

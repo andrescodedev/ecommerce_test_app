@@ -1,11 +1,17 @@
+import 'package:ecommerce_test_app/models/models.dart';
+import 'package:ecommerce_test_app/providers/providers.dart';
 import 'package:ecommerce_test_app/utils/secure_storage/secure_storage_util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DashBoardScreen extends StatelessWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final storeProvider = Provider.of<StoreProvider>(context);
+    StoreModel store = storeProvider.authenticatedStore as StoreModel;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('DashBoard'),
@@ -13,15 +19,15 @@ class DashBoardScreen extends StatelessWidget {
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               child: ListTile(
-                leading: CircleAvatar(
+                leading: const CircleAvatar(
                   backgroundColor: Colors.indigo,
                   foregroundColor: Colors.white,
                   child: Text('T'),
                 ),
-                title: Text('Nombre de la tienda'),
-                subtitle: Text('tipo de tienda'),
+                title: Text(store.nombre),
+                subtitle: Text(store.email),
               ),
             ),
             const ListTile(
@@ -62,14 +68,14 @@ class DashBoardScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: const SizedBox(
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Center(
           child: Text(
-            'Bienvenido a \ntu tienda virtual',
+            'Bienvenido ${store.nombre}\n a su tienda virtual',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
             ),
