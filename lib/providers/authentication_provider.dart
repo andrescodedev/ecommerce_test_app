@@ -11,17 +11,25 @@ class AuthenticationProvider extends ChangeNotifier {
   String _invalidPassword = '';
   String _operationNotAllowed = '';
   String _tooManyAttemptsTryLater = '';
+  String _storeNotFound = '';
+  String _invalidIdToken = '';
 
   bool _emailErrorOrAccountError = false;
   bool _passwordError = false;
   bool _responseError = false;
+  bool _storeNotFoundError = false;
+  bool _invalidIdTokenError = false;
 
   ///GETTERS
   String get storeEmail => _storeEmail;
   String get storeUid => _storeUid;
+  String get storeNotFound => _storeNotFound;
+  String get invalidIdToken => _invalidIdToken;
   bool get emailErrorOrAccountError => _emailErrorOrAccountError;
   bool get passwordError => _passwordError;
   bool get responseError => _responseError;
+  bool get storeNotFoundError => _storeNotFoundError;
+  bool get invalidIdTokenError => _invalidIdTokenError;
 
   ///
   /// PROVIDER METHODS FOR HTTPS SERVICE METHODS
@@ -71,6 +79,25 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
+  Future getUserDataByIdTokenProvider({required String idToken}) async {
+    String serviceResponse =
+        await _authService.getUserDataByIdTokenService(idToken: idToken);
+
+    if (serviceResponse == 'INVALID_ID_TOKEN') {
+      _invalidIdTokenError = true;
+      _invalidIdToken = 'Credenciales invalidas. Inicia sesión nuevamente.';
+    } else if (serviceResponse == 'USER_NOT_FOUND') {
+      _storeNotFoundError = true;
+      _storeNotFound =
+          'La cuenta pudo haber sido eliminada. Inicia sesión nuevamente.';
+    } else {
+      _storeUid = serviceResponse;
+    }
+  }
+
+  /*
+    ERROR RESPONSES FUNCTIONS
+  */
   String emailAlreadyExists() {
     _emailErrorOrAccountError = false;
     return _emailExists;

@@ -38,9 +38,10 @@ class DashBoardScreen extends StatelessWidget {
               leading: Icon(Icons.storefront_rounded),
               title: Text('Perfil'),
             ),
-            const ListTile(
-              leading: Icon(Icons.list),
-              title: Text('Faoproductos'),
+            ListTile(
+              leading: const Icon(Icons.list),
+              title: const Text('Faoproductos'),
+              onTap: () => Navigator.pushReplacementNamed(context, '/products'),
             ),
             const ListTile(
               leading: Icon(Icons.shopping_bag_rounded),

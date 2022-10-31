@@ -87,6 +87,39 @@ class AuthenticationService {
     }
   }
 
+  Future<String> getUserDataByIdTokenService({required String idToken}) async {
+    Map<String, dynamic> serviceResponse = {};
+    String storeUid = '';
+
+    Map<String, dynamic> storeCredentials = {
+      'idToken': idToken,
+    };
+
+    Uri url = Uri.https(
+      _baseUrl,
+      '/v1/accounts:lookup',
+      {
+        'key': _firebaseToken,
+      },
+    );
+
+    try {
+      http.Response requestResponse =
+          await http.post(url, body: json.encode(storeCredentials));
+
+      serviceResponse = json.decode(requestResponse.body);
+
+      if (requestResponse.statusCode == 200) {
+        storeUid = serviceResponse['users'][0]['localId'];
+        return storeUid;
+      } else {
+        return serviceResponse['error']['message'];
+      }
+    } catch (e) {
+      return 'Problemas de conexión';
+    }
+  }
+
   /*Future logOutAnUser() async {
     await secureStorage.delete(key: 'userToken');
   }*/
