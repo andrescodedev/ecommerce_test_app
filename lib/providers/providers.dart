@@ -4,3 +4,4 @@ export 'package:ecommerce_test_app/providers/product_provider.dart';
 export 'package:ecommerce_test_app/providers/signupin_provider.dart';
 export 'package:ecommerce_test_app/providers/authentication_provider.dart';
 export 'package:ecommerce_test_app/providers/category_provider.dart';
+export 'package:ecommerce_test_app/providers/category_create_provider.dart';

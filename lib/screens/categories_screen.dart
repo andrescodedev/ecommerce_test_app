@@ -24,7 +24,7 @@ class CategoriesScreen extends StatelessWidget {
             : const _CategoriesListWidget(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, '/categoryCreate'),
         child: const Icon(Icons.add),
       ),
     );
@@ -51,51 +51,66 @@ class _CategoriesListWidget extends StatelessWidget {
             CategoryModel category = categoriesList[index];
 
             return SizedBox(
-              height: 40.0,
-              child: Row(
+              height: 60.0,
+              child: Column(
                 children: [
-                  FittedBox(
-                    child: Text(
-                      category.nombre,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20.0,
-                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        child: const Icon(
-                          Icons.edit,
+                      FittedBox(
+                        child: Text(
+                          category.nombre,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                          ),
                         ),
-                        onTap: () {},
                       ),
-                      (category.disponible)
-                          ? GestureDetector(
-                              child: const Icon(
-                                Icons.visibility,
-                              ),
-                              onTap: () {},
-                            )
-                          : GestureDetector(
-                              child: const Icon(
-                                Icons.visibility_off,
-                              ),
-                              onTap: () {},
+                      Row(
+                        children: [
+                          GestureDetector(
+                            child: const Icon(
+                              Icons.edit,
                             ),
-                      GestureDetector(
-                        child: const Icon(
-                          Icons.delete,
-                        ),
-                        onTap: () {},
+                            onTap: () {
+                              print('editar categoría');
+                            },
+                          ),
+                          const SizedBox(
+                            width: 10.0,
+                          ),
+                          (category.disponible)
+                              ? GestureDetector(
+                                  child: const Icon(
+                                    Icons.visibility,
+                                  ),
+                                  onTap: () {
+                                    print('disponible');
+                                  },
+                                )
+                              : GestureDetector(
+                                  child: const Icon(
+                                    Icons.visibility_off,
+                                  ),
+                                  onTap: () {},
+                                ),
+                          const SizedBox(
+                            width: 10.0,
+                          ),
+                          GestureDetector(
+                            child: const Icon(
+                              Icons.delete,
+                            ),
+                            onTap: () {
+                              print('eliminar categoria');
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
+                  const Divider(),
                 ],
               ),
             );
@@ -103,62 +118,6 @@ class _CategoriesListWidget extends StatelessWidget {
         ),
       ),
     );
-
-    /*return ListView.builder(
-      itemCount: categoriesList.length,
-      itemBuilder: (context, index) {
-        CategoryModel category = categoriesList[index];
-
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            FittedBox(
-              child: Text(
-                category.nombre,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 18.0,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 10.0,
-            ),
-            Row(
-              children: [
-                GestureDetector(
-                  child: const Icon(
-                    Icons.edit,
-                  ),
-                  onTap: () {},
-                ),
-                (category.disponible)
-                    ? GestureDetector(
-                        child: const Icon(
-                          Icons.visibility,
-                        ),
-                        onTap: () {},
-                      )
-                    : GestureDetector(
-                        child: const Icon(
-                          Icons.visibility_off,
-                        ),
-                        onTap: () {},
-                      ),
-                GestureDetector(
-                  child: const Icon(
-                    Icons.delete,
-                  ),
-                  onTap: () {},
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );*/
   }
 }
 

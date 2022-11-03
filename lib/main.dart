@@ -25,6 +25,9 @@ void main() {
       ChangeNotifierProvider(
         create: (context) => CategoryProvider(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => CategoryCreateProvider(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -74,6 +77,7 @@ class MyApp extends StatelessWidget {
         '/signin': (context) => const SignInScreen(),
         '/dashboard': (context) => const DashBoardScreen(),
         '/categories': (context) => const CategoriesScreen(),
+        '/categoryCreate': (context) => const CategoryCreateScreen(),
         '/products': (context) => const ProductListScreen(),
         '/edit': (context) => const ProductEditScreen(),
       },
