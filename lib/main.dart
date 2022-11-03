@@ -1,4 +1,5 @@
 import 'package:ecommerce_test_app/providers/providers.dart';
+import 'package:ecommerce_test_app/screens/categories_screen.dart';
 import 'package:ecommerce_test_app/screens/screens.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (context) => AuthenticationProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => CategoryProvider(),
       ),
     ],
     child: const MyApp(),
@@ -65,12 +69,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/splash',
       routes: {
-        '/products': (context) => const ProductListScreen(),
-        '/edit': (context) => const ProductEditScreen(),
+        '/splash': (context) => const SplashScreen(),
         '/signup': (context) => const SignUpScreen(),
         '/signin': (context) => const SignInScreen(),
-        '/splash': (context) => const SplashScreen(),
         '/dashboard': (context) => const DashBoardScreen(),
+        '/categories': (context) => const CategoriesScreen(),
+        '/products': (context) => const ProductListScreen(),
+        '/edit': (context) => const ProductEditScreen(),
       },
     );
   }
