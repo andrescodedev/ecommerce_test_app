@@ -10,6 +10,7 @@ class CategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
+    final authProvider = Provider.of<AuthenticationProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -19,9 +20,24 @@ class CategoriesScreen extends StatelessWidget {
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
-        child: (categoryProvider.categoriesList.isEmpty)
-            ? const _NotCategoriesListWidget()
-            : const _CategoriesListWidget(),
+        child: FutureBuilder(
+          future: categoryProvider.getCategoriesProvider(
+            storeUid: authProvider.storeUid,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                return _CategoriesListWidget(
+                  categoriesList: snapshot.data as List<CategoryModel>,
+                );
+              } else {
+                return const _NotCategoriesListWidget();
+              }
+            } else {
+              return const CustomLoadingWidget();
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/categoryCreate'),
@@ -31,13 +47,24 @@ class CategoriesScreen extends StatelessWidget {
   }
 }
 
+/*
+  (categoryProvider.categoriesList.isEmpty)
+            ? const _NotCategoriesListWidget()
+            : const _CategoriesListWidget(),
+ */
+
 class _CategoriesListWidget extends StatelessWidget {
-  const _CategoriesListWidget({Key? key}) : super(key: key);
+  const _CategoriesListWidget({
+    Key? key,
+    required this.categoriesList,
+  }) : super(key: key);
+
+  final List<CategoryModel> categoriesList;
 
   @override
   Widget build(BuildContext context) {
-    final categoryProvider = Provider.of<CategoryProvider>(context);
-    List<CategoryModel> categoriesList = categoryProvider.categoriesList;
+    /*final categoryProvider = Provider.of<CategoryProvider>(context);
+    List<CategoryModel> categoriesList = categoryProvider.categoriesList;*/
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(

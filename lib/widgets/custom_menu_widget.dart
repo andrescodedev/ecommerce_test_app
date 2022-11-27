@@ -41,9 +41,9 @@ class CustomMenuWidget extends StatelessWidget {
             leading: const Icon(Icons.list),
             title: const Text('Categorías'),
             onTap: () async {
-              await categoryProvider.getCategoriesProvider(
+              /*await categoryProvider.getCategoriesProvider(
                 storeUid: authProvider.storeUid,
-              );
+              );*/
 
               Navigator.pushReplacementNamed(context, '/categories');
             },

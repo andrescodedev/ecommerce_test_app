@@ -39,6 +39,8 @@ class CategoryProvider extends ChangeNotifier {
     } else {
       _categoriesList = serviceResponse;
     }
+
+    return _categoriesList;
   }
 
   Future categoryCreateProvider({
@@ -63,5 +65,9 @@ class CategoryProvider extends ChangeNotifier {
       _categoryProcessError = true;
       _categoryProcessErrorMessage = 'Problemas de servidor. Intente más tarde';
     }
+  }
+
+  void callNotifyListeners() {
+    notifyListeners();
   }
 }
